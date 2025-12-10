@@ -75,7 +75,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           child: ElevatedButton(
             onPressed: () {
               googleMapController.animateCamera(
-                CameraUpdate.newLatLng(LatLng(50, 31.03437658728564)),
+                CameraUpdate.newLatLng(LatLng(30, 31.03437658728564)),
               );
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.indigo),
@@ -113,6 +113,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       markers.add(
         Marker(
           markerId: MarkerId(place.id.toString()),
+          infoWindow: InfoWindow(title: place.name),
           position: place.latLng,
           onTap: () {
             googleMapController.animateCamera(
