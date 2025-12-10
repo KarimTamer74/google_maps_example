@@ -18,6 +18,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   late GoogleMapController googleMapController;
   String? mapStyle;
   Set<Marker> markers = {};
+  Set<Polyline> polylines = {};
   List<PlaceModel> places = [
     PlaceModel(
       id: 1,
@@ -43,6 +44,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     );
     initMapStyle();
     addMarkers();
+    addPolyLines();
     super.initState();
   }
 
@@ -57,6 +59,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     return Stack(
       children: [
         GoogleMap(
+          polylines: polylines,
           zoomControlsEnabled: false,
           style: mapStyle,
           mapType: MapType.normal,
@@ -122,6 +125,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
             googleMapController.animateCamera(
               CameraUpdate.newLatLng(place.latLng),
             );
+            setState(() {});
           },
         ),
       );
@@ -137,8 +141,27 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       'assets/icons/marker_icon.png',
     );
   }
+
+  void addPolyLines() {
+    polylines.add(
+      Polyline(
+        polylineId: PolylineId('1'),
+        patterns: [PatternItem.dot],
+        color: Colors.red,
+        width: 5,
+        startCap: Cap.roundCap,
+        points: [
+          LatLng(30.78873594195323, 31.001931686920013),
+          LatLng(30.78389436117895, 30.99868154821272),
+          LatLng(30.78332721540586, 31.005805751862734),
+        ],
+      ),
+    );
+    setState(() {});
+  }
 }
 //* 1- Setup Google Map
 //* 2- Simple Map (initialCameraPosition, zoom, cameraTargetBounds, controller)
 //* 3- Map Style & type (mapType attribute) , customaize style and add json file (style operate only with normal map type)
 //* 4- Markers (set of marker) includes markerId, position, onTap
+//* 5- Polylines (set of polyline) includes polylineId, color, width, points
