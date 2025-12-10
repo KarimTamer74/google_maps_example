@@ -57,6 +57,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     return Stack(
       children: [
         GoogleMap(
+          zoomControlsEnabled: false,
           style: mapStyle,
           mapType: MapType.normal,
           markers: markers,
