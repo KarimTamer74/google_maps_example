@@ -14,6 +14,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   late CameraPosition initCameraPosition;
   late GoogleMapController googleMapController;
   String? mapStyle;
+  Set<Marker> markers = {};
   @override
   void initState() {
     initCameraPosition = CameraPosition(
@@ -21,6 +22,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       zoom: 5,
     );
     initMapStyle();
+    initMarkers();
     super.initState();
   }
 
@@ -37,6 +39,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         GoogleMap(
           style: mapStyle,
           mapType: MapType.normal,
+          markers: markers,
           // cameraTargetBounds: CameraTargetBounds(
           //   LatLngBounds(southwest: LatLng(20, 10), northeast: LatLng(25, 15)),
           // ),
@@ -72,8 +75,23 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     //* Update map style
     // googleMapController.setMapStyle(loadStyle);
   }
-}
 
+  void initMarkers() {
+    markers.add(
+      Marker(
+        markerId: MarkerId('1'),
+        position: LatLng(50, 30),
+        icon: BitmapDescriptor.defaultMarker,
+        onTap: () {
+          googleMapController.animateCamera(
+            CameraUpdate.newLatLng(LatLng(50, 30)),
+          );
+        },
+      ),
+    );
+  }
+}
 //* 1- Setup Google Map
 //* 2- Simple Map (initialCameraPosition, zoom, cameraTargetBounds, controller)
 //* 3- Map Style & type (mapType attribute) , customaize style and add json file (style operate only with normal map type)
+//* 4- Markers (set of marker) includes markerId, position, onTap
