@@ -96,12 +96,13 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     // googleMapController.setMapStyle(loadStyle);
   }
 
-  void addMarkers() {
+  void addMarkers() async {
+    BitmapDescriptor markerIcon = await initMarkerIcon();
     markers.add(
       Marker(
         markerId: MarkerId('1'),
         position: LatLng(50, 30),
-        icon: BitmapDescriptor.defaultMarker,
+        // icon: BitmapDescriptor.defaultMarker,
         onTap: () {
           googleMapController.animateCamera(
             CameraUpdate.newLatLng(LatLng(50, 30)),
@@ -109,11 +110,12 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         },
       ),
     );
-    places.map((place) {
+    for (var place in places) {
       markers.add(
         Marker(
           markerId: MarkerId(place.id.toString()),
           infoWindow: InfoWindow(title: place.name),
+          icon: markerIcon,
           position: place.latLng,
           onTap: () {
             googleMapController.animateCamera(
@@ -122,8 +124,17 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           },
         ),
       );
-    }).toSet();
+    }
+
     log(markers.length.toString(), name: 'markers');
+    setState(() {});
+  }
+
+  Future<BitmapDescriptor> initMarkerIcon() async {
+    return await BitmapDescriptor.asset(
+      const ImageConfiguration(size: Size(40, 40)),
+      'assets/icons/marker_icon.png',
+    );
   }
 }
 //* 1- Setup Google Map
