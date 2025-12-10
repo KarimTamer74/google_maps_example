@@ -19,6 +19,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   String? mapStyle;
   Set<Marker> markers = {};
   Set<Polyline> polylines = {};
+  Set<Polygon> polygons = {};
   List<PlaceModel> places = [
     PlaceModel(
       id: 1,
@@ -40,11 +41,12 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   void initState() {
     initCameraPosition = CameraPosition(
       target: LatLng(30.786618980711904, 31.000956025027943),
-      zoom: 15,
+      zoom: 3,
     );
     initMapStyle();
     addMarkers();
     addPolyLines();
+    addPloygons();
     super.initState();
   }
 
@@ -59,6 +61,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     return Stack(
       children: [
         GoogleMap(
+          polygons: polygons,
           polylines: polylines,
           zoomControlsEnabled: false,
           style: mapStyle,
@@ -159,9 +162,36 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     );
     setState(() {});
   }
+
+  void addPloygons() {
+    polygons.add(
+      Polygon(
+        polygonId: PolygonId('1'),
+        holes: [ //* to make hole or hide region of polygon
+          [
+            LatLng(29.564112766816205, 30.941956060658942),
+            LatLng(29.329369577696976, 31.017184384017128),
+            LatLng(29.121471220340695, 30.82284454867514),
+            LatLng(29.10504023298866, 30.703733036691336),
+            LatLng(29.209058804354726, 30.563724768219153),
+            LatLng(29.402216222314603, 30.484317093563288),
+          ],
+        ],
+        points: [
+          LatLng(31.68310023487944, 33.12899325429337),
+          LatLng(31.778751239088866, 25.144272991077685),
+          LatLng(24.241411229192067, 24.806890444744628),
+          LatLng(22.08970811902912, 36.73872990902558),
+        ],
+        fillColor: Colors.green.withValues(alpha: .5),
+      ),
+    );
+    setState(() {});
+  }
 }
 //* 1- Setup Google Map
 //* 2- Simple Map (initialCameraPosition, zoom, cameraTargetBounds, controller)
 //* 3- Map Style & type (mapType attribute) , customaize style and add json file (style operate only with normal map type)
 //* 4- Markers (set of marker) includes markerId, position, onTap
 //* 5- Polylines (set of polyline) includes polylineId, color, width, points
+//* 6- Polygons (set of polygon) includes polygonId, points, fillColor => design 2D shape (Rectangle, square, triangle)
