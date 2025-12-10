@@ -1,4 +1,7 @@
 // widgets/custom_google_map.dart
+import 'dart:developer';
+
+import 'package:apply_google_maps/models/place_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -15,14 +18,31 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   late GoogleMapController googleMapController;
   String? mapStyle;
   Set<Marker> markers = {};
+  List<PlaceModel> places = [
+    PlaceModel(
+      id: 1,
+      name: 'مستشفى دار القمة',
+      latLng: LatLng(30.78873594195323, 31.001931686920013),
+    ),
+    PlaceModel(
+      id: 2,
+      name: 'مطعم زينهم',
+      latLng: LatLng(30.78332721540586, 31.005805751862734),
+    ),
+    PlaceModel(
+      id: 3,
+      name: 'السيد البدوي',
+      latLng: LatLng(30.78389436117895, 30.99868154821272),
+    ),
+  ];
   @override
   void initState() {
     initCameraPosition = CameraPosition(
-      target: LatLng(30.812496158853147, 31.03437658728564),
-      zoom: 5,
+      target: LatLng(30.786618980711904, 31.000956025027943),
+      zoom: 15,
     );
     initMapStyle();
-    initMarkers();
+    addMarkers();
     super.initState();
   }
 
@@ -76,7 +96,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     // googleMapController.setMapStyle(loadStyle);
   }
 
-  void initMarkers() {
+  void addMarkers() {
     markers.add(
       Marker(
         markerId: MarkerId('1'),
@@ -89,6 +109,20 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         },
       ),
     );
+    places.map((place) {
+      markers.add(
+        Marker(
+          markerId: MarkerId(place.id.toString()),
+          position: place.latLng,
+          onTap: () {
+            googleMapController.animateCamera(
+              CameraUpdate.newLatLng(place.latLng),
+            );
+          },
+        ),
+      );
+    }).toSet();
+    log(markers.length.toString(), name: 'markers');
   }
 }
 //* 1- Setup Google Map
