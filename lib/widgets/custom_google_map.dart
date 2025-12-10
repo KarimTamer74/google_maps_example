@@ -20,6 +20,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   Set<Marker> markers = {};
   Set<Polyline> polylines = {};
   Set<Polygon> polygons = {};
+  Set<Circle> circles = {};
   List<PlaceModel> places = [
     PlaceModel(
       id: 1,
@@ -47,6 +48,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     addMarkers();
     addPolyLines();
     addPloygons();
+    addCircles();
     super.initState();
   }
 
@@ -63,6 +65,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         GoogleMap(
           polygons: polygons,
           polylines: polylines,
+          circles: circles,
           zoomControlsEnabled: false,
           style: mapStyle,
           mapType: MapType.normal,
@@ -167,7 +170,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     polygons.add(
       Polygon(
         polygonId: PolygonId('1'),
-        holes: [ //* to make hole or hide region of polygon
+        holes: [
+          //* to make hole or hide region of polygon
           [
             LatLng(29.564112766816205, 30.941956060658942),
             LatLng(29.329369577696976, 31.017184384017128),
@@ -188,6 +192,17 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     );
     setState(() {});
   }
+
+  void addCircles() {
+    circles.add(
+      Circle(
+        circleId: CircleId('1'),
+        radius: 500,
+        fillColor: Colors.red,
+        center: LatLng(28.923563382083824, 30.8478336809978),
+      ),
+    );
+  }
 }
 //* 1- Setup Google Map
 //* 2- Simple Map (initialCameraPosition, zoom, cameraTargetBounds, controller)
@@ -195,3 +210,10 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
 //* 4- Markers (set of marker) includes markerId, position, onTap
 //* 5- Polylines (set of polyline) includes polylineId, color, width, points
 //* 6- Polygons (set of polygon) includes polygonId, points, fillColor => design 2D shape (Rectangle, square, triangle)
+//* 7- Circles (set of circle) includes circleId, fillColor, center, radius
+
+//! zoom value => 0:3 if world
+//! zoom value => 4:6 if country
+//! zoom value => 10:12 if city
+//! zoom value => 13:16 if street 
+//! zoom value => 17:20 if building 
